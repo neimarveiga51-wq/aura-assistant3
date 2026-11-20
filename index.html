@@ -4,6 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#241044">
+<meta name="description" content="AURA - A tua assistente pessoal">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/aura-192.png" type="image/png">
 <title>AURA - Assistente Inteligente</title>
 <style>
 * { box-sizing: border-box; }
@@ -153,6 +157,11 @@ function speak() {
 document.getElementById("question").addEventListener("keydown",e=>{
   if(e.key==="Enter") sendMessage();
 });
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(console.error);
+  });
+}
 </script>
 </body>
 </html>
