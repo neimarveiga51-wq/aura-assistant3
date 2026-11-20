@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA - Assistente Inteligente</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(145deg,#090b20,#241044,#101c3b);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+.app {
+  width: 100%;
+  max-width: 430px;
+  height: 85vh;
+  min-height: 480px;
+  background: rgba(16,15,39,.95);
+  border: 1px solid #8053d9;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 35px #7544bb55;
+}
+header {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #49336c;
+}
+.orb {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  margin: auto auto 10px;
+  background: radial-gradient(circle at 35% 30%,#fff,#b58aff 35%,#5524a8 75%);
+  box-shadow: 0 0 30px #a56aff;
+}
+h1 { margin: 5px; letter-spacing: 5px; }
+header p { color: #c6aaff; margin: 5px; }
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+}
+.message {
+  padding: 12px 15px;
+  border-radius: 15px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  max-width: 90%;
+  white-space: pre-wrap;
+}
+.aura { background: #332452; }
+.user {
+  background: #6340a2;
+  margin-left: auto;
+}
+.controls {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #17132d;
+}
+input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #7954b0;
+  border-radius: 20px;
+  padding: 13px;
+  background: #29203f;
+  color: white;
+  outline: none;
+}
+button {
+  border: 0;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  background: #8754d6;
+  color: white;
+  font-size: 19px;
+  cursor: pointer;
+}
+footer {
+  text-align: center;
+  color: #a995c8;
+  font-size: 11px;
+  padding: 8px;
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="orb"></div>
+    <h1>AURA</h1>
+    <p>A tua assistente pessoal</p>
+  </header>
+  <div id="messages">
+    <div class="message aura">
+      Olá! 💜 Sou a AURA. Estou aqui para te ajudar. Como estás hoje?
+    </div>
+  </div>
+  <div class="controls">
+    <input id="question" placeholder="Conversa comigo..." />
+    <button onclick="sendMessage()">➤</button>
+    <button onclick="speak()" title="Falar">🎙️</button>
+  </div>
+  <footer>AURA 1.0 · Primeira versão</footer>
+</div>
+<script>
+function addMessage(text,type) {
+  const box = document.createElement("div");
+  box.className = "message " + type;
+  box.textContent = text;
+  document.getElementById("messages").appendChild(box);
+  box.scrollIntoView({block:"end"});
+}
+function sendMessage() {
+  const input = document.getElementById("question");
+  const text = input.value.trim();
+  if (!text) return;
+  addMessage(text,"user");
+  input.value = "";
+  setTimeout(() => {
+    addMessage("Recebi a tua mensagem! 💜 Ainda estamos a ligar o meu cérebro de inteligência artificial. Em breve poderemos conversar de forma inteligente.","aura");
+  },500);
+}
+function speak() {
+  const recognition = window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+  if (!recognition) {
+    addMessage("O reconhecimento de voz não está disponível neste navegador.","aura");
+    return;
+  }
+  const rec = new recognition();
+  rec.lang = "pt-PT";
+  rec.onresult = e => {
+    document.getElementById("question").value =
+      e.results[0][0].transcript;
+  };
+  rec.start();
+}
+document.getElementById("question").addEventListener("keydown",e=>{
+  if(e.key==="Enter") sendMessage();
+});
+</script>
+</body>
+</html>
